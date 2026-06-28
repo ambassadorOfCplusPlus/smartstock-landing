@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartStock — программа складского учёта и кассы для бизнеса. Купил один раз</title>
+<meta name="description" content="SmartStock Desktop — складской учёт, касса 54-ФЗ, документы РФ, маркетплейсы WB/Ozon и ИИ-помощник на вашем компьютере. Без подписок и интернета, данные только у вас. От 690 ₽ единоразово. Бесплатная версия.">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SmartStock — учёт, склад и касса для бизнеса. Без подписок">
+<meta property="og:description" content="Складской учёт, касса 54-ФЗ, маркетплейсы и ИИ-помощник на вашем ПК. Купил один раз — пользуешься всегда. От 690 ₽.">
+<meta property="og:image" content="assets/img/banner.png">
+<style>
+  :root{
+    --bg:#ffffff; --bg-soft:#f5f7fa; --ink:#1d1d1f; --muted:#6e6e73; --line:#e6e6e9;
+    --dark:#262624; --dark-card:#30302e; --dark-ink:#f5f4ef; --dark-mut:#b7b5a9;
+    --accent:#d97757; --accent-2:#bf5f3f; --ok:#2e7d32;
+    --radius:14px; --maxw:1100px; --shadow:0 10px 34px rgba(0,0,0,.09);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:"Inter","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .container{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  h1,h2,h3{line-height:1.2;margin:0 0 .5em}
+  h1{font-size:clamp(2rem,4.6vw,3.3rem);font-weight:800;letter-spacing:-.02em}
+  h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:750;letter-spacing:-.01em}
+  h3{font-size:1.15rem;font-weight:700}
+  p{margin:0 0 1rem}
+  a{color:var(--accent-2);text-decoration:none}
+  .muted{color:var(--muted)}
+  .center{text-align:center}
+  .btn{display:inline-block;padding:.85rem 1.5rem;border-radius:10px;background:var(--accent);
+       color:#fff;font-weight:650;border:none;cursor:pointer;transition:.15s;font-size:1rem}
+  .btn:hover{background:var(--accent-2);transform:translateY(-1px);text-decoration:none}
+  .btn.ghost{background:transparent;border:1.5px solid rgba(245,244,239,.35);color:var(--dark-ink)}
+  .btn.ghost:hover{background:rgba(245,244,239,.08);border-color:var(--dark-ink)}
+  .btn.lg{padding:1rem 1.8rem;font-size:1.08rem}
+
+  /* header */
+  header{position:sticky;top:0;z-index:30;background:rgba(38,38,36,.97);
+         border-bottom:1px solid #3a3a38;backdrop-filter:blur(6px)}
+  header .container{display:flex;align-items:center;gap:1rem;height:62px}
+  .logo{display:flex;align-items:center;gap:.5rem;font-weight:800;color:var(--dark-ink);font-size:1.15rem}
+  .logo .mk{width:30px;height:30px;display:grid;place-items:center;background:var(--accent);
+            border-radius:8px;font-size:1rem}
+  header nav{margin-left:auto;display:flex;gap:1.3rem;align-items:center}
+  header nav a{color:var(--dark-mut);font-size:.92rem}
+  header nav a:hover{color:var(--dark-ink)}
+  header nav a.cta{padding:.55rem 1.1rem;background:var(--accent);color:#fff;border-radius:9px;font-weight:600}
+  header nav a.cta:hover{background:var(--accent-2)}
+  @media(max-width:760px){header nav a:not(.cta){display:none}}
+
+  /* hero */
+  .hero{background:radial-gradient(1200px 500px at 70% -10%,#3a352f 0,var(--dark) 55%);
+        color:var(--dark-ink);padding:4.5rem 0 3.5rem}
+  .hero .eyebrow{display:inline-block;background:rgba(217,119,87,.16);color:#f0a888;
+        border:1px solid rgba(217,119,87,.35);padding:.3rem .85rem;border-radius:99px;
+        font-size:.83rem;font-weight:600;margin-bottom:1.1rem}
+  .hero h1{color:#fff;max-width:18ch}
+  .hero .lead{font-size:1.22rem;color:var(--dark-mut);max-width:54ch;margin:1rem 0 1.7rem}
+  .hero .lead b{color:var(--dark-ink)}
+  .hero .cta{display:flex;gap:.8rem;flex-wrap:wrap}
+  .hero .sub{margin-top:.9rem;font-size:.88rem;color:var(--dark-mut)}
+  .badges{margin-top:1.8rem;display:flex;gap:.5rem;flex-wrap:wrap}
+  .badge{background:rgba(245,244,239,.07);border:1px solid #45433f;color:var(--dark-mut);
+        padding:.4rem .8rem;border-radius:99px;font-size:.82rem}
+  .hero-shot{margin-top:2.6rem;border-radius:16px;overflow:hidden;border:1px solid #45433f;
+        box-shadow:0 30px 70px rgba(0,0,0,.45)}
+  .hero-shot img{display:block;width:100%}
+
+  /* sections */
+  section{padding:4rem 0}
+  .soft{background:var(--bg-soft)}
+  .dark{background:var(--dark);color:var(--dark-ink)}
+  .dark h2{color:#fff}
+  .lead-c{max-width:60ch;margin:0 auto 2.4rem;text-align:center;font-size:1.1rem;color:var(--muted)}
+  .grid{display:grid;gap:1.1rem}
+  .c2{grid-template-columns:repeat(2,1fr)} .c3{grid-template-columns:repeat(3,1fr)}
+  .c4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:880px){.c3,.c4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.c2,.c3,.c4{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+        padding:1.5rem;box-shadow:var(--shadow)}
+  .card .ic{font-size:1.7rem;display:block;margin-bottom:.5rem}
+  .card p{margin:0;color:var(--muted);font-size:.96rem}
+  .card.big h3{font-size:1.3rem}
+
+  /* pain */
+  .pain{list-style:none;padding:0;margin:0;display:grid;gap:.7rem;max-width:760px;margin:0 auto}
+  .pain li{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);
+        border-radius:10px;padding:.9rem 1.1rem;color:var(--ink)}
+  .pain li b{color:var(--accent-2)}
+
+  /* why / list with check */
+  .why{display:grid;gap:1.1rem;grid-template-columns:repeat(2,1fr)}
+  @media(max-width:680px){.why{grid-template-columns:1fr}}
+  .why .item{display:flex;gap:.8rem;align-items:flex-start}
+  .why .chk{flex:0 0 auto;width:30px;height:30px;border-radius:8px;background:rgba(217,119,87,.14);
+        color:var(--accent-2);display:grid;place-items:center;font-weight:800}
+  .why h3{margin:.1rem 0 .25rem;font-size:1.05rem}
+  .why p{margin:0;color:var(--dark-mut)}
+  .dark .why .item p{color:var(--dark-mut)}
+
+  /* shots */
+  figure{margin:0}
+  .shot{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+  .shot img{display:block;width:100%}
+  .shot figcaption{padding:.7rem 1rem;font-size:.88rem;color:var(--muted);border-top:1px solid var(--line)}
+
+  /* pricing */
+  .prices{display:grid;gap:1.1rem;grid-template-columns:repeat(3,1fr)}
+  @media(max-width:880px){.prices{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.prices{grid-template-columns:1fr}}
+  .price{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem;
+        box-shadow:var(--shadow);position:relative}
+  .price.hot{border:2px solid var(--accent);box-shadow:0 16px 40px rgba(217,119,87,.2)}
+  .price .tag{position:absolute;top:-12px;right:14px;background:var(--accent);color:#fff;
+        font-size:.74rem;font-weight:700;padding:.25rem .7rem;border-radius:99px}
+  .price h3{margin-bottom:.2rem}
+  .price .amt{font-size:2rem;font-weight:800;color:var(--ink);margin:.2rem 0}
+  .price .amt span{font-size:.95rem;font-weight:500;color:var(--muted)}
+  .price ul{list-style:none;padding:0;margin:.8rem 0 0;font-size:.92rem;color:var(--muted)}
+  .price li{padding:.2rem 0 .2rem 1.4rem;position:relative}
+  .price li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:800}
+
+  /* faq */
+  details{background:#fff;border:1px solid var(--line);border-radius:10px;padding:.2rem 1.1rem;margin-bottom:.7rem}
+  details[open]{box-shadow:var(--shadow)}
+  summary{cursor:pointer;font-weight:650;padding:.9rem 0;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";float:right;color:var(--accent);font-weight:800}
+  details[open] summary::after{content:"–"}
+  details p{margin:.2rem 0 1rem;color:var(--muted)}
+
+  /* footer */
+  footer{background:#1b1b19;color:var(--dark-mut);padding:2.5rem 0;font-size:.92rem}
+  footer .cols{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+  footer a{color:var(--dark-ink);display:block;margin:.2rem 0}
+  .pulse{animation:p 2.4s infinite}
+  @keyframes p{0%,100%{box-shadow:0 0 0 0 rgba(217,119,87,.5)}50%{box-shadow:0 0 0 10px rgba(217,119,87,0)}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="container">
+    <a class="logo" href="#top"><span class="mk">📦</span> SmartStock</a>
+    <nav>
+      <a href="#vygoda">Возможности</a>
+      <a href="#pochemu">Почему мы</a>
+      <a href="#ceny">Цены</a>
+      <a href="#faq">Вопросы</a>
+      <a class="cta" href="#skachat">Скачать бесплатно</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="container">
+    <span class="eyebrow">🇷🇺 Российская программа · работает офлайн · без подписок</span>
+    <h1>Складской учёт и касса, которые показывают вашу реальную прибыль</h1>
+    <p class="lead">SmartStock — это полноценная программа для магазина и склада на <b>вашем
+      компьютере</b>. Касса 54-ФЗ, документы, маркетплейсы WB/Ozon и ИИ-помощник.
+      <b>Купили один раз — пользуетесь всегда.</b> Ни абонплаты, ни зависимости от интернета.</p>
+    <div class="cta">
+      <a class="btn lg pulse" href="#skachat">🎁 Скачать бесплатно</a>
+      <a class="btn ghost lg" href="#ceny">Цены — от 690 ₽</a>
+    </div>
+    <p class="sub">Бесплатная версия: весь функционал, без ограничения по товарам. Данные
+      сохранятся при переходе на полную.</p>
+    <div class="badges">
+      <span class="badge">Windows 10 / 11</span>
+      <span class="badge">Ставится за минуту</span>
+      <span class="badge">~60 МБ</span>
+      <span class="badge">Данные только у вас</span>
+    </div>
+    <figure class="hero-shot">
+      <img src="assets/img/dashboard.png" alt="Главный экран SmartStock — сводка по складу, продажам и финансам">
+    </figure>
+  </div>
+</section>
+
+<!-- PAIN -->
+<section>
+  <div class="container">
+    <h2 class="center">Знакомо?</h2>
+    <p class="lead-c">Большинство малого бизнеса теряет деньги не на продажах, а на учёте.</p>
+    <ul class="pain">
+      <li>📉 Учёт в Excel и тетрадке — <b>остатки не сходятся</b>, а реальную прибыль никто не считает.</li>
+      <li>💳 Облачные программы тянут <b>вечную абонплату</b>, тормозят без интернета, а данные лежат на чужом сервере.</li>
+      <li>📦 Не знаете, <b>что заканчивается и что дозаказать</b> — то пусто, то деньги «заморожены» в залежавшемся товаре.</li>
+      <li>🛒 Остатки и заказы <b>Wildberries и Ozon</b> ведёте вручную, в разных кабинетах.</li>
+      <li>🧾 Касса, документы и склад — <b>в трёх разных местах</b>, всё дублируется руками.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="soft" id="vygoda">
+  <div class="container">
+    <h2 class="center">SmartStock закрывает это в одной программе</h2>
+    <p class="lead-c">Один экран для всего бизнеса — от прихода товара до чека и отчёта налоговой.</p>
+    <div class="grid c2">
+      <div class="card big"><span class="ic">💰</span>
+        <h3>Видите настоящую прибыль</h3>
+        <p>Каждая поставка помнит свою закупочную цену — программа считает реальную маржу
+        по каждому товару и чеку. Никаких «кажется, заработали».</p></div>
+      <div class="card big"><span class="ic">🧾</span>
+        <h3>Касса 54-ФЗ и документы из коробки</h3>
+        <p>Продажа со сканером, фискальный чек через «АТОЛ», а счёт, ТОРГ-12, счёт-фактура и
+        акт печатаются с вашими реквизитами и суммой прописью — в один клик.</p></div>
+      <div class="card big"><span class="ic">📦</span>
+        <h3>Полный контроль склада</h3>
+        <p>Стеллажи и ячейки, остатки по фактам, подсказки «что заканчивается» и
+        «что дозаказать». Инвентаризация ИНВ-3 со сканером — за вечер, а не за неделю.</p></div>
+      <div class="card big"><span class="ic">🛒</span>
+        <h3>Маркетплейсы и ИИ-помощник</h3>
+        <p>Остатки и цены уезжают на WB и Ozon, заказы — приходят обратно со списанием.
+        А встроенный ИИ отвечает на вопросы по вашей базе: «где лежит товар?», «что продаётся хуже всего?».</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="dark" id="pochemu">
+  <div class="container">
+    <h2 class="center">Почему выбирают SmartStock</h2>
+    <p class="lead-c" style="color:var(--dark-mut)">Мы сделали программу такой, какой хотели бы
+      пользоваться сами: честной, быстрой и навсегда вашей.</p>
+    <div class="why">
+      <div class="item"><div class="chk">₽</div><div>
+        <h3>Купил один раз — без подписки</h3>
+        <p>Платите за программу единожды и пользуетесь сколько угодно. Никакой ежемесячной абонплаты.</p></div></div>
+      <div class="item"><div class="chk">🔒</div><div>
+        <h3>Данные только у вас</h3>
+        <p>Работает офлайн, база на вашем ПК и зашифрована. Ничего не уходит в чужое облако — спокойно по 152-ФЗ.</p></div></div>
+      <div class="item"><div class="chk">⚡</div><div>
+        <h3>Лёгкая и быстрая</h3>
+        <p>~60 МБ, ставится за минуту даже на обычный офисный компьютер. Без админ-прав, без интернета.</p></div></div>
+      <div class="item"><div class="chk">🤝</div><div>
+        <h3>Поддержка от разработчика</h3>
+        <p>Программу делает и поддерживает живой человек. Поможем перенести товары и настроить под вас.</p></div></div>
+    </div>
+    <p class="center" style="margin-top:2.2rem">
+      <a class="btn lg" href="#skachat">Попробовать бесплатно</a>
+    </p>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section>
+  <div class="container">
+    <h2 class="center">Кому подходит</h2>
+    <p class="lead-c">Один склад, один компьютер — идеально для малого бизнеса.</p>
+    <div class="grid c4">
+      <div class="card"><span class="ic">🏪</span><h3>Розничный магазин</h3>
+        <p>Касса, скидки, бонусы, маркировка, ценники и этикетки.</p></div>
+      <div class="card"><span class="ic">📦</span><h3>Склад и опт</h3>
+        <p>Ячейки, приёмка, резервы под заказ, документы и отгрузки.</p></div>
+      <div class="card"><span class="ic">🛒</span><h3>Селлер маркетплейсов</h3>
+        <p>Остатки и цены WB/Ozon, заказы со списанием, финансы площадок.</p></div>
+      <div class="card"><span class="ic">🏭</span><h3>Производство и наборы</h3>
+        <p>Сборка/разборка комплектов с автосписанием и расчётом себестоимости.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENSHOTS -->
+<section class="soft">
+  <div class="container">
+    <h2 class="center">Как это выглядит</h2>
+    <p class="lead-c">Чистый и понятный интерфейс на русском. Светлая и тёмная темы.</p>
+    <div class="grid c3">
+      <figure class="shot"><img src="assets/img/inventory.png" alt="Инвентарь"><figcaption>Инвентарь — маржа, сроки годности, фильтры, импорт из Excel</figcaption></figure>
+      <figure class="shot"><img src="assets/img/fiscal.png" alt="Касса 54-ФЗ"><figcaption>Касса 54-ФЗ — чеки через АТОЛ, скидки и бонусы</figcaption></figure>
+      <figure class="shot"><img src="assets/img/orders.png" alt="Заказы"><figcaption>Заказы — статусы, резервы, документы в один клик</figcaption></figure>
+      <figure class="shot"><img src="assets/img/reports.png" alt="Отчёты"><figcaption>Отчёты — продажи, налоги, ABC-анализ; экспорт PDF/Excel</figcaption></figure>
+      <figure class="shot"><img src="assets/img/crm-funnel.png" alt="CRM"><figcaption>CRM — воронка сделок, лояльность, дисконтные карты</figcaption></figure>
+      <figure class="shot"><img src="assets/img/ai-chat.png" alt="ИИ-помощник"><figcaption>ИИ-помощник — отвечает по вашей базе прямо в программе</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE (lightly technical) -->
+<section>
+  <div class="container">
+    <h2 class="center">Что внутри</h2>
+    <p class="lead-c">Всё, что нужно для учёта, — и ничего лишнего.</p>
+    <div class="grid c3">
+      <div class="card"><span class="ic">📦</span><h3>Товары и партии</h3><p>Каталог с ценой, маржой, габаритами, штрих-кодом, сроком годности. Импорт из Excel/CSV/1С.</p></div>
+      <div class="card"><span class="ic">🧾</span><h3>Касса 54-ФЗ</h3><p>Корзина, акции по правилам, бонусы, USB-сканер, фискализация АТОЛ, очередь допробития.</p></div>
+      <div class="card"><span class="ic">🏗️</span><h3>Склад с ячейками</h3><p>Размещение по объёму и весу, товар в нескольких ячейках, план склада в 3D и маршрут к товару.</p></div>
+      <div class="card"><span class="ic">📑</span><h3>Документы РФ</h3><p>Счёт, счёт-фактура (НДС), ТОРГ-12, акт, УПД. Предпросмотр, печать, экспорт в PDF.</p></div>
+      <div class="card"><span class="ic">🛒</span><h3>Маркетплейсы</h3><p>Wildberries и Ozon: остатки, цены, импорт заказов и финансовых отчётов площадок.</p></div>
+      <div class="card"><span class="ic">🏷️</span><h3>Маркировка и серийники</h3><p>«Честный знак» (локальный учёт), серийные номера и гарантия, наборы с автосписанием.</p></div>
+      <div class="card"><span class="ic">📊</span><h3>Отчёты и аналитика</h3><p>Остатки, продажи, налоги, движение товара, ABC, КУДиР. Графики и выгрузка.</p></div>
+      <div class="card"><span class="ic">👥</span><h3>CRM и лояльность</h3><p>Карточки клиентов, сегменты, воронка сделок, тиры со скидкой, дисконтные карты.</p></div>
+      <div class="card"><span class="ic">🤖</span><h3>ИИ-ассистент</h3><p>Чат по вашим данным локально + опционально облачный ИИ (GigaChat/YandexGPT) для сложных вопросов.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="soft" id="ceny">
+  <div class="container">
+    <h2 class="center">Цены — честно и единоразово</h2>
+    <p class="lead-c">Платите за нужные модули. Никакой подписки. Бесплатное обновление в рамках версии.</p>
+    <div class="prices">
+      <div class="price"><h3>Документы</h3>
+        <div class="amt">690 ₽ <span>единоразово</span></div>
+        <p class="muted">Первичка и отчёты для тех, кому не нужен склад.</p>
+        <ul><li>Счета, ТОРГ-12, УПД, акты</li><li>CRM и клиенты</li><li>Финансы и отчёты</li></ul></div>
+
+      <div class="price"><h3>Склад</h3>
+        <div class="amt">1 490 ₽ <span>единоразово</span></div>
+        <p class="muted">Учёт остатков, ячейки, инвентаризация.</p>
+        <ul><li>Товары и партии</li><li>Ячейки и план склада</li><li>Приёмка, ИНВ-3, документы</li></ul></div>
+
+      <div class="price"><h3>Касса / Розница</h3>
+        <div class="amt">1 990 ₽ <span>единоразово</span></div>
+        <p class="muted">Для магазина: продажи и 54-ФЗ.</p>
+        <ul><li>Касса, скидки, бонусы</li><li>Маркировка и этикетки</li><li>Фискализация АТОЛ</li></ul></div>
+
+      <div class="price"><h3>Маркетплейс</h3>
+        <div class="amt">1 990 ₽ <span>единоразово</span></div>
+        <p class="muted">Полный набор для селлера WB/Ozon.</p>
+        <ul><li>Остатки и цены на площадки</li><li>Импорт заказов и финансов</li><li>Склад, резервы, CRM</li></ul></div>
+
+      <div class="price hot"><span class="tag">ВЫГОДНО</span><h3>Полный</h3>
+        <div class="amt">2 990 ₽ <span>единоразово</span></div>
+        <p class="muted">Все модули. Лучший выбор для растущего бизнеса.</p>
+        <ul><li>Склад + Касса + Маркетплейсы</li><li>Документы + CRM + Финансы</li><li>Производство + ИИ-ассистент</li></ul></div>
+
+      <div class="price"><h3>Знакомство</h3>
+        <div class="amt">Бесплатно</div>
+        <p class="muted">Весь функционал на 1 день, без лимита по товарам.</p>
+        <ul><li>Полные возможности</li><li>Без ограничения товаров</li><li>Данные сохранятся</li></ul></div>
+    </div>
+    <p class="center muted" style="margin-top:1.6rem;font-size:.92rem">
+      Сеть из нескольких точек? Есть <b>серверная версия</b> с синхронизацией.
+      Кыргызстан 🇰🇬 — отдельные издания. Спросите в чате.
+    </p>
+  </div>
+</section>
+
+<!-- DOWNLOAD / CTA -->
+<section class="dark" id="skachat">
+  <div class="container center">
+    <h2>Скачайте и попробуйте на своих товарах</h2>
+    <p class="lead-c" style="color:var(--dark-mut)">Бесплатная версия — это вся программа целиком.
+      Загрузите свой прайс из Excel и посмотрите учёт на реальных данных уже сегодня.</p>
+    <p>
+      <a class="btn lg pulse" href="https://ambassadorofcplusplus.github.io/smartstock-web/files/SmartStock-2.5.3-Beta-Setup.exe">⬇️ Скачать установщик (Windows)</a>
+    </p>
+    <p class="muted" style="font-size:.85rem;margin-top:.8rem">
+      ~60 МБ · Windows 10/11 · при первом запуске SmartScreen может предупредить
+      «неизвестный издатель» — это нормально для ПО без платного сертификата.
+    </p>
+    <p style="margin-top:1.6rem">
+      Хотите демо с вашими товарами в видеозвонке до оплаты?
+      <a style="color:#f0a888" href="https://t.me/C_plus_plus_is_good">Напишите в Telegram →</a>
+    </p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container" style="max-width:780px">
+    <h2 class="center">Частые вопросы</h2>
+    <div style="margin-top:2rem">
+      <details><summary>Это правда без подписки?</summary>
+        <p>Да. Вы платите за программу один раз и пользуетесь сколько угодно. Обновления в рамках
+        вашей версии — бесплатные. Никакой ежемесячной оплаты.</p></details>
+      <details><summary>Нужен ли интернет?</summary>
+        <p>Нет. Программа работает полностью офлайн, база хранится на вашем компьютере. Интернет нужен
+        только для необязательных функций — синхронизация с маркетплейсами и облачный ИИ.</p></details>
+      <details><summary>Где хранятся мои данные?</summary>
+        <p>Только на вашем ПК, в зашифрованной базе, с автоматическими резервными копиями. Мы не имеем
+        к ним доступа — это важно и по 152-ФЗ.</p></details>
+      <details><summary>Подходит ли касса под 54-ФЗ?</summary>
+        <p>Да. Фискализация идёт через «Драйвер ККТ АТОЛ v10». Если касса временно недоступна, чек не
+        теряется, а уходит в очередь допробития.</p></details>
+      <details><summary>Сложно ли перенести товары?</summary>
+        <p>Нет. Мастер первого запуска импортирует товары и остатки из таблицы Excel/CSV или выгрузки 1С —
+        программа сама распознаёт колонки. Поможем с переносом, если что.</p></details>
+      <details><summary>Что в бесплатной версии?</summary>
+        <p>Вся программа целиком, без ограничения по числу товаров, на 1 день с первого запуска. Введённые
+        данные сохранятся при покупке полной версии.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container cols">
+    <div style="max-width:280px">
+      <div class="logo" style="margin-bottom:.6rem"><span class="mk">📦</span> SmartStock</div>
+      Программа складского учёта, кассы и документов для малого бизнеса.<br>
+      Разработчик: Ратмир Кунтуганов.<br>© <span id="yr"></span>
+    </div>
+    <div>
+      <b style="color:var(--dark-ink)">Связаться</b>
+      <a href="https://t.me/C_plus_plus_is_good">✈️ Telegram: @C_plus_plus_is_good</a>
+      <a href="https://wa.me/79285879774">💬 WhatsApp: +7 928 587-97-74</a>
+      <a href="mailto:kuntuganov_ratmir@mail.ru">📧 kuntuganov_ratmir@mail.ru</a>
+    </div>
+    <div>
+      <b style="color:var(--dark-ink)">Быстрые ссылки</b>
+      <a href="#vygoda">Возможности</a>
+      <a href="#ceny">Цены</a>
+      <a href="#skachat">Скачать</a>
+      <a href="#faq">Вопросы</a>
+    </div>
+  </div>
+</footer>
+
+<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
+</body>
+</html>
